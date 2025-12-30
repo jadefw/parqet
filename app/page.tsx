@@ -1,4 +1,5 @@
 import CtaSection from "@/components/call-to-action";
+import ContentSection from "@/components/content";
 import Features from "@/components/features";
 import Footer from "@/components/footer";
 import HeroSection from "@/components/hero-section";
@@ -9,6 +10,7 @@ export default function Home() {
     <>
       <HeroSection />
       <Features />
+      <ContentSection />
       <TestimonialSection />
       <CtaSection />
       <Footer />
