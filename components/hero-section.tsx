@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { HeroHeader } from './header'
-import { ChevronRight, CirclePlay } from 'lucide-react'
-import Image from 'next/image'
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { HeroHeader } from './header';
+import { ChevronRight, CirclePlay } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HeroSection() {
     return (
@@ -10,17 +10,19 @@ export default function HeroSection() {
             <HeroHeader />
             <main className="overflow-hidden">
                 <section className="bg-linear-to-b to-muted from-background">
-                    <div className="relative py-44">
+                    <div className="relative py-32 md:py-44">
                         <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
                             <div className="md:w-1/2">
                                 <div>
-                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">Dein Vermögen immer im Blick</h1>
-                                    <p className="text-muted-foreground my-8 max-w-2xl text-balance text-xl">Alle wichtigen Kennzahlen, Charts und Analysen an einem Ort – für maximale Klarheit bei deinen Investments.</p>
+                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">
+                                        Dein Vermögen immer im Blick
+                                    </h1>
+                                    <p className="text-muted-foreground my-8 max-w-2xl text-balance text-xl">
+                                        Alle wichtigen Kennzahlen, Charts und Analysen an einem Ort
+                                        – für maximale Klarheit bei deinen Investments.
+                                    </p>
                                     <div className="flex items-center gap-3">
-                                        <Button
-                                            asChild
-                                            size="lg"
-                                            className="pr-4.5">
+                                        <Button asChild size="lg" className="pr-4.5">
                                             <Link href="#link">
                                                 <span className="text-nowrap">Loslegen</span>
                                                 <ChevronRight className="opacity-50" />
@@ -31,7 +33,8 @@ export default function HeroSection() {
                                             asChild
                                             size="lg"
                                             variant="outline"
-                                            className="pl-5">
+                                            className="pl-5"
+                                        >
                                             <Link href="#link">
                                                 <span className="text-nowrap">Demo</span>
                                             </Link>
@@ -40,7 +43,9 @@ export default function HeroSection() {
                                 </div>
 
                                 <div className="mt-10">
-                                    <p className="text-muted-foreground italic">Mehr als 350.000 Nutzer und  4,7 Sterne im App Store</p>
+                                    <p className="text-muted-foreground italic">
+                                        Mehr als 350.000 Nutzer und 4,7 Sterne im App Store
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -62,5 +67,5 @@ export default function HeroSection() {
                 </section>
             </main>
         </>
-    )
+    );
 }
