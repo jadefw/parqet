@@ -1,10 +1,11 @@
 'use client';
-import Link from 'next/link';
-import { Logo } from '@/components/logo';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+
 import React from 'react';
+import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Logo } from '@/components/logo';
+import { Button } from '@/components/ui/button';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -12,8 +13,13 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-} from './ui/navigation-menu';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
+} from '@/components/ui/navigation-menu';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const navigationLinks = [
     {
@@ -34,170 +40,181 @@ const navigationLinks = [
 ];
 
 export const HeroHeader = () => {
-    const [menuState, setMenuState] = React.useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
     React.useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+            setIsScrolled(window.scrollY > 20);
         };
+        // Check initial scroll
+        handleScroll();
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Lock body scroll when mobile menu is open
+    React.useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
     return (
-        <header>
-            <nav
-                data-state={menuState && 'active'}
-                className={cn(
-                    'fixed z-20 w-full transition-all duration-300',
-                    isScrolled && 'bg-background/75 border-b border-black/5 backdrop-blur-lg'
-                )}
-            >
-                <div className="mx-auto max-w-5xl px-6">
-                    <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0">
-                        <div className="flex w-full justify-between gap-6 lg:w-auto">
-                            <Link
-                                href="/"
-                                aria-label="home"
-                                className="flex items-center space-x-2"
-                            >
-                                <Logo />
-                            </Link>
+        <header
+            className={cn(
+                'fixed left-0 right-0 top-0 z-50 w-full transition-all duration-300',
+                isScrolled || isOpen
+                    ? 'bg-background/80 backdrop-blur-md border-b border-border/40'
+                    : 'bg-transparent border-transparent'
+            )}
+        >
+            <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+                <div className="flex items-center gap-6">
+                    <Link href="/" aria-label="home" className="flex items-center space-x-2">
+                        <Logo />
+                    </Link>
 
-                            <Button
-                                variant="ghost"
-                                onClick={() => setMenuState(!menuState)}
-                                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
-                                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
-                            >
-                                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-                            </Button>
-
-                            <div className="m-auto hidden size-fit lg:block">
-                                <NavigationMenu>
-                                    <NavigationMenuList>
-                                        {navigationLinks.map((link) =>
-                                            link.type === 'dropdown' ? (
-                                                <NavigationMenuItem key={link.label}>
-                                                    <NavigationMenuTrigger>
-                                                        {link.label}
-                                                    </NavigationMenuTrigger>
-                                                    <NavigationMenuContent>
-                                                        <ul className="grid gap-2 p-2">
-                                                            {link.items.map((item) => (
-                                                                <li key={item.label}>
-                                                                    <NavigationMenuLink asChild>
-                                                                        <Link
-                                                                            href={item.href}
-                                                                            className="block text-sm"
-                                                                        >
-                                                                            {item.label}
-                                                                        </Link>
-                                                                    </NavigationMenuLink>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </NavigationMenuContent>
-                                                </NavigationMenuItem>
-                                            ) : (
-                                                <NavigationMenuItem key={link.label}>
-                                                    <NavigationMenuLink asChild>
-                                                        <Link
-                                                            href={link.href}
-                                                            className="text-sm text-foreground hover:text-foreground/80"
-                                                        >
-                                                            {link.label}
-                                                        </Link>
-                                                    </NavigationMenuLink>
-                                                </NavigationMenuItem>
-                                            )
-                                        )}
-                                    </NavigationMenuList>
-                                </NavigationMenu>
-                            </div>
-                        </div>
-
-                        <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-                            <div className="lg:hidden">
-                                <div className="flex flex-col gap-4">
-                                    {navigationLinks.map((link) =>
-                                        link.type === 'dropdown' ? (
-                                            <Accordion
-                                                key={link.label}
-                                                type="single"
-                                                collapsible
-                                                className="border-b"
-                                            >
-                                                <AccordionItem
-                                                    value={link.label.toLowerCase()}
-                                                    className="border-0"
-                                                >
-                                                    <AccordionTrigger className="py-3 text-base font-normal text-foreground hover:no-underline">
-                                                        {link.label}
-                                                    </AccordionTrigger>
-                                                    <AccordionContent>
-                                                        <div className="flex flex-col gap-2 pl-4">
-                                                            {link.items.map((item) => (
-                                                                <Link
-                                                                    key={item.href}
-                                                                    href={item.href}
-                                                                    className="py-2 text-sm text-muted-foreground hover:text-foreground"
-                                                                    onClick={() =>
-                                                                        setMobileMenuOpen(false)
-                                                                    }
-                                                                >
-                                                                    {item.label}
-                                                                </Link>
-                                                            ))}
-                                                        </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </Accordion>
-                                        ) : (
-                                            <Link
-                                                key={link.label}
-                                                href={link.href}
-                                                className="border-b py-3 text-base text-foreground"
-                                                onClick={() => setMobileMenuOpen(false)}
-                                            >
+                    {/* Desktop Navigation */}
+                    <div className="hidden lg:block">
+                        <NavigationMenu>
+                            <NavigationMenuList>
+                                {navigationLinks.map((link) =>
+                                    link.type === 'dropdown' ? (
+                                        <NavigationMenuItem key={link.label}>
+                                            <NavigationMenuTrigger className="bg-transparent">
                                                 {link.label}
+                                            </NavigationMenuTrigger>
+                                            <NavigationMenuContent>
+                                                <ul className="grid w-[400px] gap-3 p-4">
+                                                    {link.items.map((item) => (
+                                                        <li key={item.label}>
+                                                            <NavigationMenuLink asChild>
+                                                                <Link
+                                                                    href={item.href}
+                                                                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                                >
+                                                                    <div className="text-sm font-medium leading-none">
+                                                                        {item.label}
+                                                                    </div>
+                                                                </Link>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </NavigationMenuContent>
+                                        </NavigationMenuItem>
+                                    ) : (
+                                        <NavigationMenuItem key={link.label}>
+                                            <Link href={link.href} legacyBehavior passHref>
+                                                <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                                                    {link.label}
+                                                </NavigationMenuLink>
                                             </Link>
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                <Button
-                                    asChild
-                                    variant="ghost"
-                                    size="sm"
-                                    className={cn(isScrolled && 'lg:hidden')}
-                                >
-                                    <Link href="#">
-                                        <span>Login</span>
-                                    </Link>
-                                </Button>
-                                <Button asChild size="sm" className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="#">
-                                        <span>Sign Up</span>
-                                    </Link>
-                                </Button>
-                                <Button
-                                    asChild
-                                    size="sm"
-                                    className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
-                                >
-                                    <Link href="#">
-                                        <span>Get Started</span>
-                                    </Link>
-                                </Button>
-                            </div>
-                        </div>
+                                        </NavigationMenuItem>
+                                    )
+                                )}
+                            </NavigationMenuList>
+                        </NavigationMenu>
                     </div>
                 </div>
+
+                {/* Right Side Items */}
+                <div className="flex items-center gap-4">
+                    {/* Desktop Auth Buttons */}
+                    <div className="hidden lg:flex items-center gap-2">
+                        {!isScrolled ? (
+                            <>
+                                <Button variant="ghost" size="sm" asChild>
+                                    <Link href="#">Login</Link>
+                                </Button>
+                                <Button size="sm" asChild>
+                                    <Link href="#">Sign Up</Link>
+                                </Button>
+                            </>
+                        ) : (
+                            <Button size="sm" asChild>
+                                <Link href="#">Get Started</Link>
+                            </Button>
+                        )}
+                    </div>
+
+                    {/* Mobile Menu Toggle */}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="lg:hidden"
+                        onClick={() => setIsOpen(!isOpen)}
+                        aria-label="Toggle Menu"
+                    >
+                        {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+                    </Button>
+                </div>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            {isOpen && (
+                <div className="fixed h-fit inset-x-0 top-16 bottom-0 z-50 flex flex-col bg-background px-6 pb-6 pt-4 animate-in slide-in-from-top-5 fade-in duration-200 lg:hidden overflow-y-auto">
+                    <div className="flex flex-1 flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            {navigationLinks.map((link) =>
+                                link.type === 'dropdown' ? (
+                                    <Accordion
+                                        key={link.label}
+                                        type="single"
+                                        collapsible
+                                        className="w-full"
+                                    >
+                                        <AccordionItem value={link.label} className="border-b-0">
+                                            <AccordionTrigger className="text-base font-medium py-3 hover:no-underline">
+                                                {link.label}
+                                            </AccordionTrigger>
+                                            <AccordionContent>
+                                                <div className="flex flex-col gap-3 pl-4">
+                                                    {link.items.map((item) => (
+                                                        <Link
+                                                            key={item.label}
+                                                            href={item.href}
+                                                            className="text-sm text-muted-foreground hover:text-foreground"
+                                                            onClick={() => setIsOpen(false)}
+                                                        >
+                                                            {item.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+                                ) : (
+                                    <Link
+                                        key={link.label}
+                                        href={link.href}
+                                        className="py-3 text-base font-medium border-b border-border/50"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                )
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Mobile Footer/Auth */}
+                    <div className="mt-6 flex flex-col gap-3 pt-6 border-t pb-10">
+                        <Button variant="outline" className="w-full justify-center" asChild>
+                            <Link href="#">Login</Link>
+                        </Button>
+                        <Button className="w-full justify-center" asChild>
+                            <Link href="#">Sign Up</Link>
+                        </Button>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };
