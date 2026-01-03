@@ -26,10 +26,22 @@ const navigationLinks = [
         label: 'Produkte',
         type: 'dropdown' as const,
         items: [
-            { label: 'Portfolio-Tracking für Privatanleger', href: '#item1' },
-            { label: 'Dividendenkalender', href: '#item2' },
-            { label: 'Parqet News Feed', href: '#item3' },
-            { label: 'Developers', href: '#item4' },
+            {
+                label: 'Portfolio-Tracking für Privatanleger',
+                desc: 'Dein Vermögen immer im Blick',
+                href: '#item1',
+            },
+            {
+                label: 'Dividendenkalender',
+                desc: 'Angekündigte und erwartete Dividenden bis zu 24 Monate im Voraus.',
+                href: '#item2',
+            },
+            {
+                label: 'Parqet News Feed',
+                desc: ' Wirtschafts- und Finanznachrichten für deine Portfolios und Watchlists. ',
+                href: '#item3',
+            },
+            { label: 'Developers', desc: 'Quality APIs for Wealth- and Fintechs', href: '#item4' },
         ],
     },
     { label: 'Preise', href: '#', type: 'link' as const },
@@ -91,17 +103,17 @@ export const HeroHeader = () => {
                                                 {link.label}
                                             </NavigationMenuTrigger>
                                             <NavigationMenuContent>
-                                                <ul className="grid w-[400px] gap-3 p-4">
+                                                <ul className="grid gap-4 w-[400px]">
                                                     {link.items.map((item) => (
                                                         <li key={item.label}>
                                                             <NavigationMenuLink asChild>
-                                                                <Link
-                                                                    href={item.href}
-                                                                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                                                >
-                                                                    <div className="text-sm font-medium leading-none">
+                                                                <Link href={item.href}>
+                                                                    <div className="text-sm leading-none font-medium">
                                                                         {item.label}
                                                                     </div>
+                                                                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                                                                        {item.desc}
+                                                                    </p>
                                                                 </Link>
                                                             </NavigationMenuLink>
                                                         </li>
@@ -159,7 +171,7 @@ export const HeroHeader = () => {
 
             {/* Mobile Menu Overlay */}
             {isOpen && (
-                <div className="fixed h-fit inset-x-0 top-16 bottom-0 z-50 flex flex-col bg-background px-6 pb-6 pt-4 animate-in slide-in-from-top-5 fade-in duration-200 lg:hidden overflow-y-auto">
+                <div className="fixed inset-x-0 top-16 z-50 flex h-[calc(100dvh-4rem)] flex-col bg-background px-6 pb-6 pt-4 animate-in slide-in-from-top-5 fade-in duration-200 lg:hidden overflow-y-auto">
                     <div className="flex flex-1 flex-col gap-6">
                         <div className="flex flex-col gap-2">
                             {navigationLinks.map((link) =>
