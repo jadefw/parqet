@@ -187,12 +187,12 @@ export const HeroHeader = () => {
                                                 {link.label}
                                             </AccordionTrigger>
                                             <AccordionContent>
-                                                <div className="flex flex-col gap-3 pl-4">
+                                                <div className="flex flex-col gap-3">
                                                     {link.items.map((item) => (
                                                         <Link
                                                             key={item.label}
                                                             href={item.href}
-                                                            className="text-sm text-muted-foreground hover:text-foreground"
+                                                            className="text-muted-foreground hover:text-foreground"
                                                             onClick={() => setIsOpen(false)}
                                                         >
                                                             {item.label}
