@@ -59,7 +59,7 @@ const navigationLinks = [
     ],
   },
   { label: 'Preise', href: '/pricing', type: 'link' as const },
-  { label: 'Blog', href: '#', type: 'link' as const },
+  { label: 'Blog', href: '/blog', type: 'link' as const },
   { label: 'Community', href: '#', type: 'link' as const },
   { label: 'Insights', href: '#', type: 'link' as const },
   { label: 'Rechner', href: '#', type: 'link' as const },
