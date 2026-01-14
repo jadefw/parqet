@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
@@ -66,6 +67,7 @@ const navigationLinks = [
 ];
 
 export const HeroHeader = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
 
@@ -90,6 +92,10 @@ export const HeroHeader = () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const isActive = (href: string) => {
+    return pathname === href || (href !== '/' && href !== '#' && pathname?.startsWith(`${href}/`));
+  };
 
   return (
     <header
@@ -140,8 +146,11 @@ export const HeroHeader = () => {
                     </NavigationMenuItem>
                   ) : (
                     <NavigationMenuItem key={link.label}>
-                      <Link href={link.href} passHref>
-                        <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                      <Link href={link.href} legacyBehavior passHref>
+                        <NavigationMenuLink
+                          active={isActive(link.href)}
+                          className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                        >
                           {link.label}
                         </NavigationMenuLink>
                       </Link>
@@ -219,7 +228,10 @@ export const HeroHeader = () => {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="py-3 text-base font-medium border-b border-border/50"
+                    className={cn(
+                      'py-3 text-base font-medium border-b border-border/50',
+                      isActive(link.href) && 'text-primary font-semibold'
+                    )}
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
