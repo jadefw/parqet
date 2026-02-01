@@ -3,6 +3,7 @@ import Footer from '@/components/footer';
 import { getBlogPosts, getAllCategories } from '@/lib/blog';
 import { BlogList } from './blog-list';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Blog - Parqet',
@@ -23,7 +24,9 @@ export default function BlogPage() {
             <p>Alles Neue rund um Parqet.</p>
           </div>
 
-          <BlogList posts={posts} categories={categories} />
+          <Suspense fallback={<div className="py-10 text-center">Loading...</div>}>
+            <BlogList posts={posts} categories={categories} />
+          </Suspense>
         </div>
       </section>
       <Footer />
