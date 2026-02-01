@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: 'Latest news and updates from Parqet.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function BlogPage() {
   const posts = getBlogPosts();
   const categories = getAllCategories();
